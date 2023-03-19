@@ -1,18 +1,19 @@
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin
-} from '@jupyterlab/application';
+import {JupyterFrontEnd, JupyterFrontEndPlugin} from '@jupyterlab/application';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
+
+import ButtonExtension from './button';
 
 /**
  * Initialization data for the voicepilot extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
+  // activate,
   id: 'voicepilot:plugin',
   autoStart: true,
   optional: [ISettingRegistry],
   activate: (app: JupyterFrontEnd, settingRegistry: ISettingRegistry | null) => {
+    app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension());
     console.log('JupyterLab extension voicepilot is activated!');
 
     if (settingRegistry) {
