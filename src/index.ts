@@ -2,7 +2,7 @@ import {JupyterFrontEnd, JupyterFrontEndPlugin} from '@jupyterlab/application';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import ButtonExtension from './button';
+import { ButtonExtension } from './button';
 
 /**
  * Initialization data for the voicepilot extension.
@@ -30,3 +30,4 @@ const plugin: JupyterFrontEndPlugin<void> = {
 };
 
 export default plugin;
+
