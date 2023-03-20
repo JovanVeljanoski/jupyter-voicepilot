@@ -1,5 +1,3 @@
-// declare var MediaRecorder: any;
-
 interface DataAvailableEvent extends Event {
     data: Blob;
 }

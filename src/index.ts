@@ -15,10 +15,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
   requires: [ISettingRegistry],
   activate: (app: JupyterFrontEnd, settings: ISettingRegistry | null) => {
     const { commands } = app;
-    app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension());
+    const button = new ButtonExtension();
+    app.docRegistry.addWidgetExtension(
+      'Notebook', button
+    );
     console.log('JupyterLab extension voicepilot is activated!');
-
-    let apiKey = '';
 
     /**
      * Load the settings for this extension
@@ -26,8 +27,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
      * @param setting Extension settings
      */
     function loadSetting(setting: ISettingRegistry.ISettings): void {
-      apiKey = setting.get('open_api_key').composite as string;
+      const apiKey = setting.get('open_api_key').composite as string;
       console.log('apiKey:', apiKey);
+      return 
     };
 
     // Wait for the application to be restored and
@@ -35,7 +37,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     Promise.all([app.restored, settings?.load(PLUGIN_ID)])
       .then(([, setting]) => {
         // Read the settings
-        loadSetting(setting!);
+        const apiKey = setting?.get('open_api_key').composite as string;
+        button.apiKey = apiKey;
 
         // Listen for your plugin setting changes using Signal
         setting?.changed.connect(loadSetting);
@@ -49,7 +52,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
               setting?.set('open_api_key', apiKey),
             ])
               .then(() => {
-                const newKey = setting?.get('open_api_key').composite as number;
+                const newKey = setting?.get('open_api_key').composite as string;
+                button.apiKey = newKey;
                 window.alert(`VoicePilot: API is set to '${newKey}'.`);
               })
               .catch((reason) => {

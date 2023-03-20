@@ -5,9 +5,10 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { ToolbarButton } from '@jupyterlab/apputils';
 
-import { insert_code_cell_below, get_transcript, get_code } from './notebook_actions';
+import { insert_code_cell_below } from './notebook_actions';
 
 import { Recorder } from './recorder';
+import { OpenAIClient } from './openai_client';
 
 export class ButtonExtension
     implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
@@ -22,20 +23,30 @@ export class ButtonExtension
 
     private is_active = false;
     private recorder: Recorder | null = new Recorder();
+    private ai: OpenAIClient | null = null;
+
+    set apiKey(apiKey: string) {
+        console.log("Setting API key");
+        this.ai = new OpenAIClient(apiKey);
+    }
 
     createNew(
         panel: NotebookPanel,
         context: DocumentRegistry.IContext<INotebookModel>
-    ): IDisposable {
+    ): IDisposable {                
         const buttonFunction = async () => {
+            if (this.ai === null) {
+                alert('Please set your OpenAI API key in the settings');
+                return;
+            }
             if (this.is_active) {
                 this.is_active = false;
                 if (this.recorder) {
                     const blob = await this.recorder.stopRecording();
                     console.log(blob);
-                    const transcript = await get_transcript(blob)
+                    const transcript = await this.ai.getTranscript(blob)
                     console.log(transcript);
-                    const code = await get_code(transcript);
+                    const code = await this.ai.getCode(transcript!);
                     insert_code_cell_below(panel, code!);
                 }
                 console.log('Recording stopped');
