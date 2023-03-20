@@ -1,8 +1,15 @@
 {
   "jupyter.lab.shortcuts": [],
-  "title": "voicepilot",
-  "description": "voicepilot settings.",
+  "title": "Voice Pilot",
+  "description": "Voice Pilot settings.",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "open_api_key": {
+      "type": "string",
+      "title": "Open API Key",
+      "description": "Your Open API Key",
+      "default": "banana"
+    }
+  },
   "additionalProperties": false
 }

@@ -14,27 +14,6 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-// async function get_transcript(blob: Blob): Promise<string> {
-//     const url = 'https://api.openai.com/v1/audio/transcriptions';
-//     // const stream = blob.stream();
-//     const headers = {
-//         'Content-Type': 'multipart/form-data',
-//         'Authorization': 'Bearer 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'
-//     };
-//     const formData = new FormData();
-//     // const file = new File([blob], 'input.webm', { type: 'audio/webm' });
-//     // const buffer = await blob.arrayBuffer();
-//     // fs.writeFileSync('input.webm', Buffer.from(buffer));
-//     writeToFile(blob, 'input.webm');
-//     // console.log(file);
-//     formData.append('file', 'input.webm');
-//     formData.append('model', 'whisper-1');
-
-//     const response = await axios.post(url, formData, { headers });
-//     const transcription = response.data.text;
-//     return transcription;
-// }
-
 
 async function get_transcript(blob: Blob) {
     const audio = new File([blob], 'input.webm', { type: 'audio/webm' });
