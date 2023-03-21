@@ -1,4 +1,7 @@
-import {JupyterFrontEnd, JupyterFrontEndPlugin} from '@jupyterlab/application';
+import {
+  JupyterFrontEnd,
+  JupyterFrontEndPlugin
+} from '@jupyterlab/application';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
@@ -16,9 +19,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   activate: (app: JupyterFrontEnd, settings: ISettingRegistry | null) => {
     const { commands } = app;
     const button = new ButtonExtension();
-    app.docRegistry.addWidgetExtension(
-      'Notebook', button
-    );
+    app.docRegistry.addWidgetExtension('Notebook', button);
     console.log('JupyterLab extension voicepilot is activated!');
 
     /**
@@ -29,8 +30,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     function loadSetting(setting: ISettingRegistry.ISettings): void {
       const apiKey = setting.get('open_api_key').composite as string;
       console.log('apiKey:', apiKey);
-      return 
-    };
+      return;
+    }
 
     // Wait for the application to be restored and
     // for the settings for this plugin to be loaded
@@ -48,28 +49,25 @@ const plugin: JupyterFrontEndPlugin<void> = {
           // isToggled: () => apiKey,
           execute: () => {
             // Programmatically change a setting
-            Promise.all([
-              setting?.set('open_api_key', apiKey),
-            ])
+            Promise.all([setting?.set('open_api_key', apiKey)])
               .then(() => {
                 const newKey = setting?.get('open_api_key').composite as string;
                 button.apiKey = newKey;
                 window.alert(`VoicePilot: API is set to '${newKey}'.`);
               })
-              .catch((reason) => {
+              .catch(reason => {
                 console.error(
                   `Something went wrong when changing the settings.\n${reason}`
                 );
               });
-          },
+          }
         });
       })
-      .catch((reason) => {
+      .catch(reason => {
         console.error(
           `Something went wrong when reading the settings.\n${reason}`
         );
       });
-
 
     // if (settingRegistry) {
     //   settingRegistry
@@ -85,9 +83,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     // } else {
     //   console.warn('Setting registry not available.');
     // }
-
   }
 };
 
 export default plugin;
-
