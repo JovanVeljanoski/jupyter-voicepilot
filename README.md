@@ -1,6 +1,6 @@
 # jupyter_voicepilot
 
-[![Github Actions Status](workflows/Build/badge.svg)](actions/workflows/build.yml)
+[![Github Actions Status](https://github.com/JovanVeljanoski/jupyter-voicepilot/workflows/Build/badge.svg)](https://github.com/JovanVeljanoski/jupyter-voicepilot/actions/workflows/build.yml)
 A JupyterLab extension for generating code and interacting with JupyterLab via voice commands.
 
 ## Requirements
