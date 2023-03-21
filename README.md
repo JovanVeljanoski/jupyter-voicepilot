@@ -1,6 +1,6 @@
 # jupyter_voicepilot
 
-[![Github Actions Status](https://github.com/JovanVeljanoski/jupyter-voicepilot/workflows/Build/badge.svg)](https://github.com/JovanVeljanoski/jupyter-voicepilot/actions/workflows/build.yml)
+[![Github Actions Status](workflows/Build/badge.svg)](actions/workflows/build.yml)
 A JupyterLab extension for generating code and interacting with JupyterLab via voice commands.
 
 ## Requirements
@@ -86,7 +86,7 @@ jlpm test
 
 #### Integration tests
 
-This extension uses [Playwright](https://playwright.dev/docs/intro/) for the integration tests (aka user level tests).
+This extension uses [Playwright](https://playwright.dev/docs/intro) for the integration tests (aka user level tests).
 More precisely, the JupyterLab helper [Galata](https://github.com/jupyterlab/jupyterlab/tree/master/galata) is used to handle testing the extension in JupyterLab.
 
 More information are provided within the [ui-tests](./ui-tests/README.md) README.
