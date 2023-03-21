@@ -1,4 +1,4 @@
-interface DataAvailableEvent extends Event {
+interface IDataAvailableEvent extends Event {
   data: Blob;
 }
 
@@ -15,7 +15,7 @@ class Recorder {
         this.mediaRecorder = new MediaRecorder(stream, config);
         this.mediaRecorder.addEventListener(
           'dataavailable',
-          (event: DataAvailableEvent) => {
+          (event: IDataAvailableEvent) => {
             this.chunks.push(event.data);
           }
         );

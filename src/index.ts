@@ -12,7 +12,6 @@ import { ButtonExtension } from './button';
  */
 const PLUGIN_ID = 'voicepilot:plugin';
 const plugin: JupyterFrontEndPlugin<void> = {
-  // activate,
   id: PLUGIN_ID,
   autoStart: true,
   requires: [ISettingRegistry],
