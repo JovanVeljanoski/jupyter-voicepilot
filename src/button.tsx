@@ -11,7 +11,6 @@ import { insert_code_cell_below } from './notebook_actions';
 import { Recorder } from './recorder';
 import { OpenAIClient } from './openai_client';
 
-
 const vynilIcon = new LabIcon({
   name: 'jupyterlab:record-vinyl',
   svgstr: recordVinylStr

@@ -5,18 +5,20 @@
 */
 
 @keyframes fade {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 .vp-recording path {
-    fill: #c11010; /* Red */
-    animation: fade 1s ease-in-out infinite;
+  fill: #c11010; /* Red */
+  animation: fade 1s ease-in-out infinite;
 }
