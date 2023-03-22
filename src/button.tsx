@@ -5,7 +5,10 @@ import { ToolbarButton } from '@jupyterlab/apputils';
 import { LabIcon } from '@jupyterlab/ui-components';
 import recordVinylStr from '../style/icons/record-vinyl-solid.svg';
 
-import { insert_code_in_cell, notebook_voice_actions } from './notebook_actions';
+import {
+  insert_code_in_cell,
+  notebook_voice_actions
+} from './notebook_actions';
 
 import { Recorder } from './recorder';
 import { OpenAIClient } from './openai_client';
@@ -50,16 +53,16 @@ export class ButtonExtension
           const blob = await this.recorder.stopRecording();
           console.log(blob);
           const transcript = await this.ai.getTranscript(blob);
-            console.log(transcript);
+          console.log(transcript);
           if (!notebook_voice_actions(panel, transcript!)) {
             if (panel.content.activeCell?.model.type == 'code') {
               const code = await this.ai.getCode(transcript!);
-            insert_code_in_cell(panel, code!);
+              insert_code_in_cell(panel, code!);
             } else {
               insert_code_in_cell(panel, transcript!);
             }
           } else {
-              console.log('Notebook action was performed.');
+            console.log('Notebook action was performed.');
           }
         }
         console.log('Recording stopped');
