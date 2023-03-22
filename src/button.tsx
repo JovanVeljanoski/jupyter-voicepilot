@@ -54,7 +54,6 @@ export class ButtonExtension
           const transcript = await this.ai.getTranscript(blob);
           console.log(transcript);
           const executed = this.cmd_handler.execute(panel, transcript!);
-          console.log('Executed command from the registry: ', executed);
           if (!executed) {
             if (panel.content.activeCell?.model.type === 'code') {
               const code = await this.ai.getCode(transcript!);
@@ -63,7 +62,7 @@ export class ButtonExtension
               insert_code_in_cell(panel, transcript!);
             }
           } else {
-            console.log('Notebook action was performed.');
+            console.log('Notebook action has been executed.');
           }
         }
         console.log('Recording stopped');
