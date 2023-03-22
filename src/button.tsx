@@ -1,15 +1,15 @@
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
-// import { NotebookActions, NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { ToolbarButton } from '@jupyterlab/apputils';
 import { LabIcon } from '@jupyterlab/ui-components';
 import recordVinylStr from '../style/icons/record-vinyl-solid.svg';
 
-import { insert_code_cell_below } from './notebook_actions';
+import { insert_code_in_cell } from './notebook_actions';
 
 import { Recorder } from './recorder';
 import { OpenAIClient } from './openai_client';
+import { NotebookCmdHandler } from './notebook_cmd_handler';
 
 const vynilIcon = new LabIcon({
   name: 'jupyterlab:record-vinyl',
@@ -30,6 +30,7 @@ export class ButtonExtension
   private button: ToolbarButton | null = null;
   private recorder: Recorder | null = new Recorder();
   private ai: OpenAIClient | null = null;
+  private cmd_handler: NotebookCmdHandler = new NotebookCmdHandler();
 
   set apiKey(apiKey: string) {
     console.log('Setting API key');
@@ -52,8 +53,17 @@ export class ButtonExtension
           console.log(blob);
           const transcript = await this.ai.getTranscript(blob);
           console.log(transcript);
-          const code = await this.ai.getCode(transcript!);
-          insert_code_cell_below(panel, code!);
+          const executed = this.cmd_handler.execute(panel, transcript!);
+          if (!executed) {
+            if (panel.content.activeCell?.model.type === 'code') {
+              const code = await this.ai.getCode(transcript!);
+              insert_code_in_cell(panel, code!);
+            } else {
+              insert_code_in_cell(panel, transcript!);
+            }
+          } else {
+            console.log('Notebook action has been executed.');
+          }
         }
         console.log('Recording stopped');
       } else {
