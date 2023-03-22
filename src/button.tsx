@@ -3,11 +3,18 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 // import { NotebookActions, NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import { ToolbarButton } from '@jupyterlab/apputils';
+import { LabIcon } from '@jupyterlab/ui-components';
+import recordVinylStr from '../style/icons/record-vinyl-solid.svg';
 
 import { insert_code_cell_below } from './notebook_actions';
 
 import { Recorder } from './recorder';
 import { OpenAIClient } from './openai_client';
+
+const vynilIcon = new LabIcon({
+  name: 'jupyterlab:record-vinyl',
+  svgstr: recordVinylStr
+});
 
 export class ButtonExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
@@ -20,7 +27,7 @@ export class ButtonExtension
    * @returns Disposable on the added button
    */
 
-  private is_active = false;
+  private button: ToolbarButton | null = null;
   private recorder: Recorder | null = new Recorder();
   private ai: OpenAIClient | null = null;
 
@@ -33,13 +40,13 @@ export class ButtonExtension
     panel: NotebookPanel,
     context: DocumentRegistry.IContext<INotebookModel>
   ): IDisposable {
-    const buttonFunction = async () => {
+    const onClick = async () => {
       if (this.ai === null) {
         alert('Please set your OpenAI API key in the settings');
         return;
       }
-      if (this.is_active) {
-        this.is_active = false;
+      if (this.button!.hasClass('vp-recording')) {
+        this.button!.toggleClass('vp-recording');
         if (this.recorder) {
           const blob = await this.recorder.stopRecording();
           console.log(blob);
@@ -50,21 +57,22 @@ export class ButtonExtension
         }
         console.log('Recording stopped');
       } else {
-        this.is_active = true;
+        this.button!.toggleClass('vp-recording');
         this.recorder?.startRecording();
         console.log('Recording started');
       }
     };
-    const button = new ToolbarButton({
-      className: 'clear-output-button',
+    this.button = new ToolbarButton({
+      icon: vynilIcon,
+      pressedTooltip: 'Stop recording...',
       label: 'Voice Pilot',
-      onClick: buttonFunction,
-      tooltip: 'Voice Pilot'
+      onClick: onClick,
+      tooltip: 'Start recording...'
     });
 
-    panel.toolbar.insertItem(10, 'clearOutputs', button);
+    panel.toolbar.insertItem(10, 'voicePilotBtn', this.button);
     return new DisposableDelegate(() => {
-      button.dispose();
+      this.button!.dispose();
     });
   }
 }

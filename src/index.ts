@@ -29,7 +29,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     function loadSetting(setting: ISettingRegistry.ISettings): void {
       const apiKey = setting.get('open_api_key').composite as string;
       console.log('apiKey:', apiKey);
-      return;
+      button.apiKey = apiKey;
     }
 
     // Wait for the application to be restored and
@@ -43,7 +43,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         // Listen for your plugin setting changes using Signal
         setting?.changed.connect(loadSetting);
 
-        commands.addCommand('COMMAND_ID', {
+        commands.addCommand('vp-modify-api-key', {
           label: 'Modify API Key',
           // isToggled: () => apiKey,
           execute: () => {
