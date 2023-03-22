@@ -5,13 +5,11 @@ import { ToolbarButton } from '@jupyterlab/apputils';
 import { LabIcon } from '@jupyterlab/ui-components';
 import recordVinylStr from '../style/icons/record-vinyl-solid.svg';
 
-import {
-  insert_code_in_cell,
-  notebook_voice_actions
-} from './notebook_actions';
+import { insert_code_in_cell } from './notebook_actions';
 
 import { Recorder } from './recorder';
 import { OpenAIClient } from './openai_client';
+import { NotebookCmdHandler } from './notebook_cmd_handler';
 
 const vynilIcon = new LabIcon({
   name: 'jupyterlab:record-vinyl',
@@ -32,6 +30,7 @@ export class ButtonExtension
   private button: ToolbarButton | null = null;
   private recorder: Recorder | null = new Recorder();
   private ai: OpenAIClient | null = null;
+  private cmd_handler: NotebookCmdHandler = new NotebookCmdHandler();
 
   set apiKey(apiKey: string) {
     console.log('Setting API key');
@@ -54,8 +53,10 @@ export class ButtonExtension
           console.log(blob);
           const transcript = await this.ai.getTranscript(blob);
           console.log(transcript);
-          if (!notebook_voice_actions(panel, transcript!)) {
-            if (panel.content.activeCell?.model.type == 'code') {
+          const executed = this.cmd_handler.execute(panel, transcript!);
+          console.log('Executed command from the registry: ', executed);
+          if (!executed) {
+            if (panel.content.activeCell?.model.type === 'code') {
               const code = await this.ai.getCode(transcript!);
               insert_code_in_cell(panel, code!);
             } else {
