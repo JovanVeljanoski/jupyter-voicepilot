@@ -38,6 +38,11 @@ The generated code will be inserted in the cell. An exception to this is when yo
 If a cell is of type `markdown`, the extension will insert the text you provided in the cell.
 An exception to this is when you provide a set phrase which is mapped to a specific Notebook navigation action. See below for more details.
 
+### ChatGPT interaction
+
+If you start your voice message with "hey", the message will be sent to the `ChatGPT` model.
+If the current cell is empty, it will be converted to a markdown cell and the response will be added there. If the current cell is not empty, a new `markdown` cell will be inserted below the current cell, containign the response from ChatGPT.
+
 ### Notebook navigation
 
 The extension can also be used for some basic nagivation around in JupyterLab Notebook. The following table shows the Notebook actions that a supported, and the corresponding phrases that you can use to trigger them.

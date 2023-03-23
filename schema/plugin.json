@@ -15,6 +15,13 @@
       "title": "Open API Key",
       "description": "Your Open API Key",
       "default": "banana"
+    },
+    "max_tokens": {
+      "type": "integer",
+      "title": "Max Tokens",
+      "description": "The maximum number of tokens to generate",
+      "default": 256,
+      "minimum": 1
     }
   },
   "additionalProperties": false
