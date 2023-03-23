@@ -41,7 +41,7 @@ An exception to this is when you provide a set phrase which is mapped to a speci
 ### ChatGPT interaction
 
 If you start your voice message with "hey", the message will be sent to the `ChatGPT` model.
-If the current cell is empty, it will be converted to a markdown cell and the response will be added there. If the current cell is not empty, a new `markdown` cell will be inserted below the current cell, containign the response from ChatGPT.
+If the current cell is empty, it will be converted to a markdown cell and the response will be added there. If the current cell is not empty, a new `markdown` cell will be inserted below the current cell, containing the response from ChatGPT.
 
 ### Notebook navigation
 
