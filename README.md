@@ -4,6 +4,9 @@
 
 A JupyterLab extension for generating code and interacting with JupyterLab via voice commands. This extension can also be used for some basic nagivation around in JupyterLab Notebook. It is built around OpenAI's `Whisper-1` and `GPT-3` APIs. You will need to have an OpenAI API key to use this extension.
 
+Click on the image below to see a demo of the extension:
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/JlHnDm4oUgA/maxresdefault.jpg)](https://www.youtube.com/watch?v=JlHnDm4oUgA)
+
 ## Requirements
 
 - JupyterLab >= 3.0
