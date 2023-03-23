@@ -7,9 +7,9 @@ class CustomFormData extends FormData {
 }
 
 export class OpenAIClient {
-  private openai: OpenAIApi;
+  private openai: OpenAIApi | undefined;
 
-  constructor(apiKey: string) {
+  set apiKey(apiKey: string) {
     const configuration = new Configuration({
       apiKey: apiKey,
       formDataCtor: CustomFormData

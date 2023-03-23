@@ -19,6 +19,20 @@ const vynilIcon = new LabIcon({
 export class ButtonExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
+  private button: ToolbarButton | null = null;
+  private recorder: Recorder = new Recorder();
+  private aiClient: OpenAIClient  = new OpenAIClient();
+  private cmdHandler: NotebookCmdHandler = new NotebookCmdHandler();
+
+  set apiKey(apiKey: string) {
+    console.log('Setting API key');
+    this.aiClient.apiKey = apiKey;
+  }
+
+  toggleRecording() {
+    this.button?.onClick();
+  }
+
   /**
    * Create a new extension for the notebook panel widget.
    *
@@ -26,53 +40,41 @@ export class ButtonExtension
    * @param context Notebook context
    * @returns Disposable on the added button
    */
-
-  private button: ToolbarButton | null = null;
-  private recorder: Recorder | null = new Recorder();
-  private ai: OpenAIClient | null = null;
-  private cmd_handler: NotebookCmdHandler = new NotebookCmdHandler();
-
-  set apiKey(apiKey: string) {
-    console.log('Setting API key');
-    this.ai = new OpenAIClient(apiKey);
-  }
-
   createNew(
     panel: NotebookPanel,
     context: DocumentRegistry.IContext<INotebookModel>
   ): IDisposable {
     const onClick = async () => {
-      if (this.ai === null) {
+      if (this.aiClient?.apiKey === null) {
         alert('Please set your OpenAI API key in the settings');
         return;
       }
-      if (this.button!.hasClass('vp-recording')) {
-        this.button!.toggleClass('vp-recording');
-        if (this.recorder) {
-          const blob = await this.recorder.stopRecording();
-          console.log(blob);
-          const transcript = await this.ai.getTranscript(blob);
-          console.log(transcript);
-          const executed = this.cmd_handler.execute(panel, transcript!);
-          if (!executed) {
-            if (panel.content.activeCell?.model.type === 'code') {
-              const code = await this.ai.getCode(transcript!);
-              insert_code_in_cell(panel, code!);
-            } else {
-              insert_code_in_cell(panel, transcript!);
-            }
+      const is_recording = this.button!.hasClass('vp-recording');
+      this.button!.toggleClass('vp-recording');
+      if (is_recording) {
+        const blob = await this.recorder.stopRecording();
+        console.log(blob);
+        const transcript = await this.aiClient.getTranscript(blob);
+        console.log(transcript);
+        const executed = this.cmdHandler.execute(panel, transcript!);
+        if (!executed) {
+          if (panel.content.activeCell?.model.type === 'code') {
+            const code = await this.aiClient.getCode(transcript!);
+            insert_code_in_cell(panel, code!);
           } else {
-            console.log('Notebook action has been executed.');
+            insert_code_in_cell(panel, transcript!);
           }
+        } else {
+          console.log('Notebook action has been executed.');
         }
         console.log('Recording stopped');
       } else {
-        this.button!.toggleClass('vp-recording');
         this.recorder?.startRecording();
         console.log('Recording started');
-      }
+      }      
     };
     this.button = new ToolbarButton({
+      className: 'vp-button',
       icon: vynilIcon,
       pressedTooltip: 'Stop recording...',
       label: 'Voice Pilot',
@@ -80,9 +82,9 @@ export class ButtonExtension
       tooltip: 'Start recording...'
     });
 
-    panel.toolbar.insertItem(10, 'voicePilotBtn', this.button);
+    panel.toolbar.insertItem(10, 'vp-button', this.button);
     return new DisposableDelegate(() => {
-      this.button!.dispose();
+      this.button?.dispose();
     });
   }
 }

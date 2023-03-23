@@ -22,3 +22,8 @@
   fill: #c11010; /* Red */
   animation: fade 1s ease-in-out infinite;
 }
+
+.vp-button svg {
+    margin-right: 2px;
+    margin-bottom: 1px;
+}
