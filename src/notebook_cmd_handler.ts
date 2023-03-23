@@ -106,6 +106,24 @@ export class NotebookCmdHandler {
       this.registry[cmd] = [changeCellTypeToCode];
     }
     for (const cmd of [
+      'insert code cell below',
+      'add code cell below',
+      'insert cell below',
+      'add cell below',
+      'insert cell below'
+    ]) {
+      this.registry[cmd] = [NotebookActions.insertBelow];
+    }
+    for (const cmd of [
+      'insert code cell above',
+      'add code cell above',
+      'insert cell above',
+      'add cell above',
+      'insert cell above'
+    ]) {
+      this.registry[cmd] = [NotebookActions.insertAbove];
+    }
+    for (const cmd of [
       'insert markdown cell below',
       'add markdown cell below'
     ]) {
