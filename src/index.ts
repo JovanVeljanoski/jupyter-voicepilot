@@ -21,18 +21,19 @@ const plugin: JupyterFrontEndPlugin<void> = {
     settings: ISettingRegistry,
     palette: ICommandPalette
   ) => {
+    console.log('JupyterLab extension voicepilot is activated!');
     const { commands, docRegistry } = app;
     const buttonExt = new ButtonExtension();
     docRegistry.addWidgetExtension('Notebook', buttonExt);
+
     palette.addItem({
-      command: 'voicepilot:modify-api-key',
+      command: 'voicepilot:show-api-key',
       category: 'VoicePilot'
     });
     palette.addItem({
       command: 'voicepilot:toggle-button',
       category: 'VoicePilot'
     });
-    console.log('JupyterLab extension voicepilot is activated!');
 
     commands.addCommand('voicepilot:toggle-button', {
       label: 'Toggle VoicePilot',
@@ -46,9 +47,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
      *
      * @param setting Extension settings
      */
-    function loadSetting(setting: ISettingRegistry.ISettings): void {
+    function updateExtensionKey(setting: ISettingRegistry.ISettings): void {
       const apiKey = setting.get('open_api_key').composite as string;
-      console.log('apiKey:', apiKey);
       buttonExt.apiKey = apiKey;
     }
 
@@ -60,30 +60,21 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const apiKey = setting?.get('open_api_key').composite as string;
         buttonExt.apiKey = apiKey;
 
-        // Listen for your plugin setting changes using Signal
-        setting?.changed.connect(loadSetting);
-
-        commands.addCommand('voicepilot:modify-api-key', {
+        commands.addCommand('voicepilot:show-api-key', {
           label: 'Show API Key',
           execute: () => {
-            // Programmatically change a setting
-            Promise.all([setting?.set('open_api_key', apiKey)])
-              .then(() => {
-                const newKey = setting?.get('open_api_key').composite as string;
-                buttonExt.apiKey = newKey;
-                return showDialog({
-                  title: 'VoicePilot API Key',
-                  body: newKey,
-                  buttons: [Dialog.okButton()]
-                });
-              })
-              .catch(reason => {
-                console.error(
-                  `Something went wrong when changing the settings.\n${reason}`
-                );
-              });
+            const apiKey = setting?.get('open_api_key').composite as string;
+            buttonExt.apiKey = apiKey;
+            return showDialog({
+              title: 'VoicePilot API Key',
+              body: apiKey,
+              buttons: [Dialog.okButton()]
+            });
           }
         });
+
+        // Listen for your plugin setting changes using Signal
+        setting?.changed.connect(updateExtensionKey);
       })
       .catch(reason => {
         console.error(
