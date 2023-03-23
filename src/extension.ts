@@ -1,11 +1,14 @@
 import { IDisposable, DisposableDelegate } from '@lumino/disposable';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
-import { ToolbarButton } from '@jupyterlab/apputils';
+import { ToolbarButton, showErrorMessage } from '@jupyterlab/apputils';
 import { LabIcon } from '@jupyterlab/ui-components';
 import recordVinylStr from '../style/icons/record-vinyl-solid.svg';
 
-import { insert_code_in_cell } from './notebook_actions';
+import {
+  insert_code_in_cell,
+  insert_chat_answer_in_cell
+} from './notebook_actions';
 
 import { Recorder } from './recorder';
 import { OpenAIClient } from './openai_client';
@@ -29,6 +32,11 @@ export class ButtonExtension
     this.aiClient.apiKey = apiKey;
   }
 
+  set maxTokens(maxTokens: number) {
+    console.log('Setting max tokens');
+    this.aiClient.maxTokens = maxTokens;
+  }
+
   toggleRecording() {
     this.button?.onClick();
   }
@@ -46,7 +54,10 @@ export class ButtonExtension
   ): IDisposable {
     const onClick = async () => {
       if (this.aiClient?.apiKey === null) {
-        alert('Please set your OpenAI API key in the settings');
+        showErrorMessage(
+          'Voice Pilot Error',
+          'Please set your OpenAI API key in the settings'
+        );
         return;
       }
       const is_recording = this.button!.hasClass('vp-recording');
@@ -58,11 +69,22 @@ export class ButtonExtension
         console.log(transcript);
         const executed = this.cmdHandler.execute(panel, transcript!);
         if (!executed) {
-          if (panel.content.activeCell?.model.type === 'code') {
-            const code = await this.aiClient.getCode(transcript!);
-            insert_code_in_cell(panel, code!);
+          if (
+            transcript!
+              .toLowerCase()
+              .replace(/[^\w\s]/gi, '')
+              .startsWith('hey')
+          ) {
+            console.log('Calling ChatGPT');
+            const answer = await this.aiClient.getChatAnswer(transcript!);
+            insert_chat_answer_in_cell(panel, answer!);
           } else {
-            insert_code_in_cell(panel, transcript!);
+            if (panel.content.activeCell?.model.type === 'code') {
+              const code = await this.aiClient.getCode(transcript!);
+              insert_code_in_cell(panel, code!);
+            } else {
+              insert_code_in_cell(panel, transcript!);
+            }
           }
         } else {
           console.log('Notebook action has been executed.');

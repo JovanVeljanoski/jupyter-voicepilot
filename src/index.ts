@@ -47,23 +47,24 @@ const plugin: JupyterFrontEndPlugin<void> = {
      *
      * @param setting Extension settings
      */
-    function updateExtensionKey(setting: ISettingRegistry.ISettings): void {
-      const apiKey = setting.get('open_api_key').composite as string;
+    function updateExtension(settings: ISettingRegistry.ISettings): void {
+      const apiKey = settings.get('open_api_key').composite as string;
+      const maxTokens = settings.get('max_tokens').composite as number;
       buttonExt.apiKey = apiKey;
+      buttonExt.maxTokens = maxTokens;
     }
 
     // Wait for the application to be restored and
     // for the settings for this plugin to be loaded
     Promise.all([app.restored, settings?.load(PLUGIN_ID)])
-      .then(([, setting]) => {
+      .then(([, settings]) => {
         // Read the settings
-        const apiKey = setting?.get('open_api_key').composite as string;
-        buttonExt.apiKey = apiKey;
+        updateExtension(settings);
 
         commands.addCommand('voicepilot:show-api-key', {
           label: 'Show API Key',
           execute: () => {
-            const apiKey = setting?.get('open_api_key').composite as string;
+            const apiKey = settings?.get('open_api_key').composite as string;
             buttonExt.apiKey = apiKey;
             return showDialog({
               title: 'VoicePilot API Key',
@@ -74,7 +75,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
 
         // Listen for your plugin setting changes using Signal
-        setting?.changed.connect(updateExtensionKey);
+        settings?.changed.connect(updateExtension);
       })
       .catch(reason => {
         console.error(
