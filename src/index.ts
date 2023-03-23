@@ -17,20 +17,26 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   requires: [ISettingRegistry, ICommandPalette],
   activate: (
-    app: JupyterFrontEnd, 
-    settings: ISettingRegistry, 
-    palette: ICommandPalette,
+    app: JupyterFrontEnd,
+    settings: ISettingRegistry,
+    palette: ICommandPalette
   ) => {
     const { commands, docRegistry } = app;
     const buttonExt = new ButtonExtension();
     docRegistry.addWidgetExtension('Notebook', buttonExt);
-    palette.addItem({ command: 'voicepilot:modify-api-key', category: 'VoicePilot' });
-    palette.addItem({ command: 'voicepilot:toggle-button', category: 'VoicePilot' });
+    palette.addItem({
+      command: 'voicepilot:modify-api-key',
+      category: 'VoicePilot'
+    });
+    palette.addItem({
+      command: 'voicepilot:toggle-button',
+      category: 'VoicePilot'
+    });
     console.log('JupyterLab extension voicepilot is activated!');
 
     commands.addCommand('voicepilot:toggle-button', {
       label: 'Toggle VoicePilot',
-      execute: () => { 
+      execute: () => {
         buttonExt.toggleRecording();
       }
     });
@@ -68,7 +74,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
                 return showDialog({
                   title: 'VoicePilot API Key',
                   body: newKey,
-                  buttons: [Dialog.okButton()],
+                  buttons: [Dialog.okButton()]
                 });
               })
               .catch(reason => {

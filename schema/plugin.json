@@ -1,11 +1,11 @@
 {
-  "jupyter.lab.shortcuts": [{
-    "command": "voicepilot:toggle-button",
-    "keys": [
-      "V V"
-    ],
-    "selector": "body"
-  }],
+  "jupyter.lab.shortcuts": [
+    {
+      "command": "voicepilot:toggle-button",
+      "keys": ["Ctrl Shift V"],
+      "selector": ".jp-Notebook:focus"
+    }
+  ],
   "title": "Voice Pilot",
   "description": "Voice Pilot settings.",
   "type": "object",

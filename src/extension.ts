@@ -21,7 +21,7 @@ export class ButtonExtension
 {
   private button: ToolbarButton | null = null;
   private recorder: Recorder = new Recorder();
-  private aiClient: OpenAIClient  = new OpenAIClient();
+  private aiClient: OpenAIClient = new OpenAIClient();
   private cmdHandler: NotebookCmdHandler = new NotebookCmdHandler();
 
   set apiKey(apiKey: string) {
@@ -71,7 +71,7 @@ export class ButtonExtension
       } else {
         this.recorder?.startRecording();
         console.log('Recording started');
-      }      
+      }
     };
     this.button = new ToolbarButton({
       className: 'vp-button',
