@@ -1,7 +1,8 @@
 # jupyter_voicepilot
 
 [![Github Actions Status](https://github.com/JovanVeljanoski/jupyter-voicepilot/workflows/Build/badge.svg)](https://github.com/JovanVeljanoski/jupyter-voicepilot/actions/workflows/build.yml)
-A JupyterLab extension for generating code and interacting with JupyterLab via voice commands.
+
+A JupyterLab extension for generating code and interacting with JupyterLab via voice commands. This extension can also be used for some basic nagivation around in JupyterLab Notebook. It is built around OpenAI's `Whisper-1` and `GPT-3` APIs. You will need to have an OpenAI API key to use this extension.
 
 ## Requirements
 
@@ -22,6 +23,53 @@ To remove the extension, execute:
 ```bash
 pip uninstall jupyter_voicepilot
 ```
+
+## Usage
+
+Click the `Voice Pilot` button in the JupyterLab to start recording your instruction. When done, click the button again to stop the recording. The extension will then process your instruction and execute the appropriate action.
+
+### Generating code
+
+If a cell is of type `code`, the extension will generate code based on the input you provided.
+The generated code will be inserted in the cell. An exception to this is when you provide a set phrase which is mapped to a specific Notebook navigation action. See below for more details.
+
+### Dictation
+
+If a cell is of type `markdown`, the extension will insert the text you provided in the cell.
+An exception to this is when you provide a set phrase which is mapped to a specific Notebook navigation action. See below for more details.
+
+### Notebook navigation
+
+The extension can also be used for some basic nagivation around in JupyterLab Notebook. The following table shows the Notebook actions that a supported, and the corresponding phrases that you can use to trigger them.
+
+| Action                     | Phrase                                                                                 |
+| -------------------------- | -------------------------------------------------------------------------------------- |
+| `run`                      | "run", "run cell", "run the cell", "execute"                                           |
+| `runAll`                   | "run all", "run all cells", "execute all", "execute all cells"                         |
+| `runAndAdvance`            | "run and advance", "run cell and advance", "execute and advance"                       |
+| `runAndInsert`             | "run and insert", "run cell and insert", "execute and insert"                          |
+| `runAllAbove`              | "run all above", "run all cells above", "execute all above", "execute all cells above" |
+| `runAllBelow`              | "run all below", "run all cells below", "execute all below", "execute all cells below" |
+| `deleteCells`              | "delete", "delete cell", "delete cells", "delete the cell", "delete the cells"         |
+| `clearAllOutputs`          | "clear all outputs", "clear all the outputs", "clear outputs"                          |
+| `selectLastRunCell`        | "select last run cell", "select the last run cell"                                     |
+| `undo`                     | "undo"                                                                                 |
+| `redo`                     | "redo"                                                                                 |
+| `cut`                      | "cut"                                                                                  |
+| `copy`                     | "copy"                                                                                 |
+| `paste`                    | "paste"                                                                                |
+| `changeCellTypeToMarkdown` | "markdown", "to markdown", "markdown cell", "convert to markdown", "cast to markdown"  |
+| `changeCellTypeToCode`     | "code", "to code", "code cell", "convert to code", "cast to code"                      |
+| `insertMarkdownCellBelow`  | "insert markdown cell below", "add markdown below"                                     |
+| `insertMarkdownCellAbove`  | "insert markdown cell above", "add markdown above"                                     |
+| `insertCodeCellBelow`      | "insert code cell below", "add code below"                                             |
+| `insertCodeCellAbove`      | "insert code cell above", "add code above"                                             |
+
+## Configuration
+
+In the advanced settings editor, you can set the following configuration options:
+
+- Open API Key (_required_): Your OpenAI API key. You can get one [here](https://platform.openai.com/overview).
 
 ## Contributing
 
@@ -71,7 +119,7 @@ In development mode, you will also need to remove the symlink created by `jupyte
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
 folder is located. Then you can remove the symlink named `voicepilot` within that folder.
 
-### Testing the extension
+<!-- ### Testing the extension
 
 #### Frontend tests
 
@@ -93,4 +141,4 @@ More information are provided within the [ui-tests](./ui-tests/README.md) README
 
 ### Packaging the extension
 
-See [RELEASE](RELEASE.md)
+See [RELEASE](RELEASE.md) -->
