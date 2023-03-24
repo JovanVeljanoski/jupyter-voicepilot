@@ -1,6 +1,6 @@
 {
     "name": "voicepilot",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "A JupyterLab extension for generating code and interacting with JupyterLab via voice commands.",
     "keywords": [
         "jupyter",
