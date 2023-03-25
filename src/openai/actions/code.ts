@@ -3,14 +3,10 @@ import { IOpenAIAction, showError } from './base';
 
 export class CodeAction implements IOpenAIAction {
   MODEL_ID = 'text-davinci-003';
-  private _maxTokens: number;
+  private maxTokens: number;
 
   constructor(maxTokens: number) {
-    this._maxTokens = maxTokens;
-  }
-
-  set maxTokens(maxTokens: number) {
-    this._maxTokens = maxTokens;
+    this.maxTokens = maxTokens;
   }
 
   private createPrompt(text: string) {
@@ -19,7 +15,7 @@ export class CodeAction implements IOpenAIAction {
     return `${prefix}${text}`;
   }
 
-  async execute(
+  async run(
     api: OpenAIApi | undefined,
     input: any
   ): Promise<string | undefined> {
@@ -27,7 +23,7 @@ export class CodeAction implements IOpenAIAction {
       ?.createCompletion({
         model: this.MODEL_ID,
         prompt: this.createPrompt(input as string),
-        max_tokens: this._maxTokens
+        max_tokens: this.maxTokens
       })
       .catch(err => {
         showError(err);

@@ -1,9 +1,4 @@
-import {
-  CodeAction,
-  ChatAction,
-  TranscriptAction,
-  IOpenAIAction
-} from './actions';
+import { CodeAction, ChatAction, TranscriptAction } from './actions';
 import { Configuration, OpenAIApi } from 'openai';
 
 class CustomFormData extends FormData {
@@ -12,24 +7,10 @@ class CustomFormData extends FormData {
   }
 }
 
-enum AIActionType {
-  Code = 'code',
-  Chat = 'chat',
-  Transcript = 'transcript'
-}
-
 export default class OpenAIClient {
   private api: OpenAIApi | undefined;
-  private actions: Record<AIActionType, IOpenAIAction>;
   private _apiKey = '';
-
-  constructor() {
-    this.actions = {
-      [AIActionType.Code]: new CodeAction(256),
-      [AIActionType.Chat]: new ChatAction(),
-      [AIActionType.Transcript]: new TranscriptAction()
-    };
-  }
+  private _maxTokens = 256;
 
   set apiKey(apiKey: string) {
     this._apiKey = apiKey;
@@ -45,22 +26,21 @@ export default class OpenAIClient {
   }
 
   set maxTokens(maxTokens: number) {
-    (this.actions[AIActionType.Code] as CodeAction).maxTokens = maxTokens;
-  }
-
-  private async execute(actionType: AIActionType, input: any) {
-    return this.actions[actionType]?.execute(this.api, input);
+    this._maxTokens = maxTokens;
   }
 
   async getCode(input: string) {
-    return this.execute(AIActionType.Code, input);
+    return new CodeAction(this._maxTokens).run(this.api, input);
   }
 
   async getChat(input: string) {
-    return this.execute(AIActionType.Chat, input);
+    // history.push(input);
+    // pass history to chat action in constructor
+    return new ChatAction().run(this.api, input);
+    // history.push(answer);
   }
 
   async getTranscript(input: Blob) {
-    return this.execute(AIActionType.Transcript, input);
+    return new TranscriptAction().run(this.api, input);
   }
 }

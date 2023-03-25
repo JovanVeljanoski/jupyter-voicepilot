@@ -4,7 +4,7 @@ import { IOpenAIAction, showError } from './base';
 export class TranscriptAction implements IOpenAIAction {
   MODEL_ID = 'whisper-1';
 
-  async execute(
+  async run(
     api: OpenAIApi | undefined,
     input: any
   ): Promise<string | undefined> {

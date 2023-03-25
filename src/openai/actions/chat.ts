@@ -4,7 +4,7 @@ import { IOpenAIAction, showError } from './base';
 export class ChatAction implements IOpenAIAction {
   MODEL_ID = 'gpt-3.5-turbo';
 
-  async execute(
+  async run(
     api: OpenAIApi | undefined,
     input: any
   ): Promise<string | undefined> {
