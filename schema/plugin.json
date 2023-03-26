@@ -14,7 +14,7 @@
       "type": "string",
       "title": "Open API Key",
       "description": "Your Open API Key",
-      "default": "banana"
+      "default": ""
     },
     "max_tokens": {
       "type": "integer",
