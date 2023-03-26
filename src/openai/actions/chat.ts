@@ -6,15 +6,12 @@ export class ChatAction implements IOpenAIAction {
 
   async run(
     api: OpenAIApi | undefined,
-    input: any
+    messages: any
   ): Promise<string | undefined> {
     const answer = await api
       ?.createChatCompletion({
         model: this.MODEL_ID,
-        messages: [
-          { role: 'system', content: 'You are a helpful assistant.' },
-          { role: 'user', content: input as string }
-        ]
+        messages: messages
       })
       .catch(err => {
         showError(err);
