@@ -14,7 +14,7 @@ export default class OpenAIClient {
   private _chatHistory: any = [
     { role: 'system', content: 'You are a helpful assistant.' }
   ];
-  private _chatHistoryLength = 10;
+  private _chatHistoryMaxLength = 10;
 
   set apiKey(apiKey: string) {
     this._apiKey = apiKey;
@@ -33,13 +33,13 @@ export default class OpenAIClient {
     this._maxTokens = maxTokens;
   }
 
-  set chatHistoryLength(chatHistoryLength: number) {
-    this._chatHistoryLength = chatHistoryLength;
+  set chatHistoryMaxLength(chatHistoryMaxLength: number) {
+    this._chatHistoryMaxLength = chatHistoryMaxLength;
   }
 
   public appendChatMessage(role: string, content: string | undefined): void {
     this._chatHistory.push({ role: role as string, content: content });
-    if (this._chatHistory.length > this._chatHistoryLength) {
+    if (this._chatHistory.length > this._chatHistoryMaxLength) {
       this._chatHistory.shift();
     }
   }
