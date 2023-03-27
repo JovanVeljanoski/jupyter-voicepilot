@@ -42,7 +42,7 @@ export default class OpenAIClient {
   public appendChatMessage(role: string, content: string): void {
     this._chatHistory.push({ role: role as string, content: content });
     if (this._chatHistory.length > this._chatHistoryMaxLength) {
-        this._chatHistory.shift();
+      this._chatHistory.shift();
     }
   }
 
@@ -54,7 +54,7 @@ export default class OpenAIClient {
     this.appendChatMessage('user', input);
     const answer = await new ChatAction().run(this.api, this._chatHistory);
     if (answer) {
-        this.appendChatMessage('system', answer);
+      this.appendChatMessage('system', answer);
     }
     return answer;
   }
