@@ -7,11 +7,13 @@ class CustomFormData extends FormData {
   }
 }
 
+type ChatHistory = Array<{ role: string; content: string }>;
+
 export default class OpenAIClient {
   private api: OpenAIApi | undefined;
   private _apiKey = '';
   private _maxTokens = 256;
-  private _chatHistory: any = [
+  private _chatHistory: ChatHistory = [
     { role: 'system', content: 'You are a helpful assistant.' }
   ];
   private _chatHistoryMaxLength = 10;
@@ -37,10 +39,10 @@ export default class OpenAIClient {
     this._chatHistoryMaxLength = chatHistoryMaxLength;
   }
 
-  public appendChatMessage(role: string, content: string | undefined): void {
+  public appendChatMessage(role: string, content: string): void {
     this._chatHistory.push({ role: role as string, content: content });
     if (this._chatHistory.length > this._chatHistoryMaxLength) {
-      this._chatHistory.shift();
+        this._chatHistory.shift();
     }
   }
 
@@ -51,7 +53,9 @@ export default class OpenAIClient {
   async getChat(input: string) {
     this.appendChatMessage('user', input);
     const answer = await new ChatAction().run(this.api, this._chatHistory);
-    this.appendChatMessage('system', answer);
+    if (answer) {
+        this.appendChatMessage('system', answer);
+    }
     return answer;
   }
 
