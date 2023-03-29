@@ -50,8 +50,11 @@ const plugin: JupyterFrontEndPlugin<void> = {
     function updateExtension(settings: ISettingRegistry.ISettings): void {
       const apiKey = settings.get('open_api_key').composite as string;
       const maxTokens = settings.get('max_tokens').composite as number;
+      const chatHistoryMaxLength = settings.get('chat_history_length')
+        .composite as number;
       buttonExt.apiKey = apiKey;
       buttonExt.maxTokens = maxTokens;
+      buttonExt.chatHistoryMaxLength = chatHistoryMaxLength;
     }
 
     // Wait for the application to be restored and

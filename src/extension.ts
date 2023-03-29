@@ -25,6 +25,10 @@ export class ButtonExtension
     this.voiceProcessor.maxTokens = maxTokens;
   }
 
+  set chatHistoryMaxLength(chatHistoryMaxLength: number) {
+    this.voiceProcessor.chatHistoryMaxLength = chatHistoryMaxLength;
+  }
+
   toggleRecording() {
     this.button?.onClick();
   }

@@ -20,6 +20,11 @@ export class VoiceProcessor {
     this.aiClient.maxTokens = maxTokens;
   }
 
+  set chatHistoryMaxLength(chatHistoryMaxLength: number) {
+    console.log('Setting chat history length');
+    this.aiClient.chatHistoryMaxLength = chatHistoryMaxLength;
+  }
+
   isConfigured(): boolean {
     if (!this.aiClient.apiKey) {
       showErrorMessage(
