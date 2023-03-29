@@ -1,6 +1,7 @@
 # jupyter_voicepilot
 
 [![Github Actions Status](https://github.com/JovanVeljanoski/jupyter-voicepilot/workflows/Build/badge.svg)](https://github.com/JovanVeljanoski/jupyter-voicepilot/actions/workflows/build.yml)
+[![Downloads](https://static.pepy.tech/badge/jupyter-voicepilot/month)](https://pepy.tech/project/jupyter-voicepilot)
 
 A JupyterLab extension for generating code and interacting with JupyterLab via voice commands. This extension can also be used for some basic nagivation around in JupyterLab Notebook. It is built around OpenAI's `Whisper-1` and `GPT-3` APIs. You will need to have an OpenAI API key to use this extension.
 
